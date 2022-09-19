@@ -1,77 +1,81 @@
-import logging
 import os
-from tkinter.messagebox import RETRY
+from time import sleep
 import requests
 import json
 import zipfile 
 import io
 from retry import retry
 
-baseUrl = os.getenv("baseUrl")
+base_url = os.getenv('base_url')
 
-class D365Interaction():
-    __accessToken__ = ""
-    __logging__ = None
+class d365_interaction_client():
+    __access_token__ = ''
+
     
-    def __init__(self, loggingMain):
-        self.__accessToken__ = self.__auth_to_d365()
-        self.__logging__ = loggingMain
+    def __init__(self):
+        self.__access_token__ = self.__auth_to_d365__()
+
     
-    def __auth_to_d365(self):
-        aadTenantId = os.getenv("aadTenantId")
-        aadClientId = os.getenv("aadClientId")
-        aadSecretKey = os.getenv("aadSecretKey")
+    def __auth_to_d365__(self):
+        aad_tenant_id = os.getenv('aad_tenant_id')
+        aad_client_id = os.getenv('aad_client_id')
+        aad_secret_key = os.getenv('aad_secret_key')
         
-        url = "https://login.microsoftonline.com/" + aadTenantId + "/oauth2/token"
-        payload={"grant_type": "client_credentials",
-        "client_id": aadClientId,
-        "client_secret": aadSecretKey,
-        "resource": baseUrl}
+        url = 'https://login.microsoftonline.com/' + aad_tenant_id + '/oauth2/token'
+        payload={'grant_type': 'client_credentials',
+            'client_id': aad_client_id,
+            'client_secret': aad_secret_key,
+            'resource': base_url}
 
-        response = requests.request("POST", url, data=payload)
-        jsonResponse = json.loads(response.text)
-        accessToken = jsonResponse["access_token"]
-        #print("DEBUG: {0}".format(accessToken))
-        return accessToken
+        response = requests.request('POST', url, data=payload)
+        json_response = json.loads(response.text)
+        access_token = json_response['access_token']
+        return access_token
 
-    def renew_sas_token_and_get_payload_url(self, payloadFileName):
-        url = baseUrl + "/data/DataManagementDefinitionGroups/Microsoft.Dynamics.DataEntities.GetAzureWriteUrl"
+
+    def renew_sas_token_and_get_payload_url(self, payload_file_name):
+        url = base_url + '/data/DataManagementDefinitionGroups/Microsoft.Dynamics.DataEntities.GetAzureWriteUrl'
 
         payload = json.dumps({
-            "uniqueFileName": payloadFileName
+            'uniqueFileName': payload_file_name
         })
         
         headers = {
-            "Authorization": "Bearer " + self.__accessToken__,
-            "Content-Type": "application/json"
+            'Authorization': 'Bearer ' + self.__access_token__,
+            'Content-Type': 'application/json'
         }
 
-        response = requests.request("POST", url, headers=headers, data=payload)
-        jsonResponse = json.loads(response.text)
-        jsonBlobValue = json.loads(jsonResponse["value"])
-        blobUrl = jsonBlobValue["BlobUrl"]
-        #print(blobUrl)
+        response = requests.request('POST', url, headers=headers, data=payload)
+        json_response = json.loads(response.text)
+        json_blob_value = json.loads(json_response['value'])
+        blobUrl = json_blob_value['BlobUrl']
         return blobUrl
     
-    def download_payload_from_blob_and_unzip(self, payloadUrl):
-        u = requests.get(payloadUrl)
+    
+    def download_payload_from_blob_and_unzip(self, payload_url):
+        u = requests.get(payload_url)
         f = io.BytesIO() 
         f.write(u.content)
         z = zipfile.ZipFile(f)
         
-        payloadFiles = {i: z.read(i) for i in z.namelist()}
+        payload_files = {i: z.read(i) for i in z.namelist()}
         
-        return payloadFiles
+        return payload_files
+    
     
     @retry(delay=1, tries=5, jitter=1)
-    def odata_check_exist(self, urlRequest):
+    def odata_check_exist(self, url_request):
         headers = {
-            'Authorization': 'Bearer ' + self.__accessToken__
+            'Authorization': 'Bearer ' + self.__access_token__
         }
 
-        recordsNumber = 0
-        response = requests.request("GET", baseUrl + urlRequest, headers=headers)
-        jsonResponse = json.loads(response.text)
-        recordsNumber = len(jsonResponse["value"])
+        records_number = 0
+        response = requests.request('GET', base_url + url_request, headers=headers)
+        if response.status_code == 429:
+            sleep(float(response.headers.get('Retry-After')))
+            response = requests.request('GET', base_url + url_request, headers=headers)
+            
+        json_response = json.loads(response.text)
+        records_number = len(json_response['value'])
     
-        return recordsNumber != 0
+        return records_number != 0
