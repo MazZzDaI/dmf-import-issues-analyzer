@@ -1,3 +1,4 @@
+import logging
 import os
 from time import sleep
 import requests
@@ -54,7 +55,10 @@ class d365_interaction_client():
     
     def download_payload_from_blob_and_unzip(self, payload_url):
         u = requests.get(payload_url)
-        f = io.BytesIO() 
+        if u.status_code == 404:
+            return None
+
+        f = io.BytesIO()
         f.write(u.content)
         z = zipfile.ZipFile(f)
         
@@ -78,4 +82,4 @@ class d365_interaction_client():
         json_response = json.loads(response.text)
         records_number = len(json_response['value'])
     
-        return records_number != 0
+        return records_number != 0 
