@@ -19,27 +19,15 @@ class d365_xml_validation_client():
 
 
     def download_aws_payload(self, input_definition_group_id):
-        payload_files = None
-        try:
-            aws_file_url = self.__aws_interaction_client__.find_aws_file_url(input_definition_group_id)
-            if aws_file_url:
-                payload_files = self.__aws_interaction_client__.download_payload_from_aws_s3_and_unzip(aws_file_url)
-            else:
-                self.__logging__.error('{}:{}:No file found in AWS'.format(input_definition_group_id, ''))
-        except Exception as e:
-            print (e)
-            pass
+        aws_file_url = self.__aws_interaction_client__.find_aws_file_url(input_definition_group_id)
+        payload_files = self.__aws_interaction_client__.download_payload_from_aws_s3_and_unzip(aws_file_url)
 
         return payload_files
 
 
     def download_azure_payload(self, input_definition_group_id):
-        payload_files = None
-        try:
-            new_blob_url = self.__d365_interaction_client__.renew_sas_token_and_get_payload_url(input_definition_group_id)
-            payload_files = self.__d365_interaction_client__.download_payload_from_blob_and_unzip(new_blob_url)
-        except:
-            pass
+        new_blob_url = self.__d365_interaction_client__.renew_sas_token_and_get_payload_url(input_definition_group_id)
+        payload_files = self.__d365_interaction_client__.download_payload_from_blob_and_unzip(new_blob_url)
 
         return payload_files
     

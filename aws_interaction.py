@@ -80,7 +80,7 @@ class aws_interaction():
         aws_file_url = ''
 
         for item in self.__aws_rainbow_table__:
-            if item.__contains__(input_definition_group_id):
+            if input_definition_group_id.lower() in item.lower():
                 aws_file_url = item
                 break
 
