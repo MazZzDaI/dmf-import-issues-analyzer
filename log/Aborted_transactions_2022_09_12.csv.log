@@ -1,0 +1,30 @@
+INFO:root:ORDER-B-87c7da16-e75b-4d0c-be4e-055d4afb4ac6.zip:1068:Sales order check:700438938
+INFO:root:ORDER-B-87c7da16-e75b-4d0c-be4e-055d4afb4ac6.zip:1068:Sales order line check:700438938-0001
+INFO:root:ORDER-B-d241636f-c7d9-409a-ba6b-3a21234012a2.zip:1068:Sales order check:700438875
+INFO:root:ORDER-B-d241636f-c7d9-409a-ba6b-3a21234012a2.zip:1068:Sales order line check:700438875-0001
+INFO:root:ORDER-B-de13ed27-fef9-4898-913a-ee7a84e216eb.zip:1068:Sales order check:700438835
+INFO:root:ORDER-B-de13ed27-fef9-4898-913a-ee7a84e216eb.zip:1068:Sales order check:700438836
+INFO:root:ORDER-B-de13ed27-fef9-4898-913a-ee7a84e216eb.zip:1068:Sales order line check:700438835-0001
+INFO:root:ORDER-B-de13ed27-fef9-4898-913a-ee7a84e216eb.zip:1068:Sales order line check:700438835-0002
+INFO:root:ORDER-B-de13ed27-fef9-4898-913a-ee7a84e216eb.zip:1068:Sales order line check:700438835-0003
+INFO:root:ORDER-B-de13ed27-fef9-4898-913a-ee7a84e216eb.zip:1068:Sales order line check:700438836-0001
+INFO:root:ORDER-B-66d0c1bc-9a36-4c84-b9a9-9d22c9f17a9f.zip:1068:Sales order check:700438821
+INFO:root:ORDER-B-66d0c1bc-9a36-4c84-b9a9-9d22c9f17a9f.zip:1068:Sales order check:700438830
+INFO:root:ORDER-B-66d0c1bc-9a36-4c84-b9a9-9d22c9f17a9f.zip:1068:Sales order line check:700438821-0001
+INFO:root:ORDER-B-66d0c1bc-9a36-4c84-b9a9-9d22c9f17a9f.zip:1068:Sales order line check:700438830-0001
+INFO:root:ORDER-B-aa2e8fc0-e845-407e-b9e1-e5f84b63108a.zip:1068:Sales order check:700438803
+INFO:root:ORDER-B-aa2e8fc0-e845-407e-b9e1-e5f84b63108a.zip:1068:Sales order check:700438818
+INFO:root:ORDER-B-aa2e8fc0-e845-407e-b9e1-e5f84b63108a.zip:1068:Sales order check:700438827
+INFO:root:ORDER-B-aa2e8fc0-e845-407e-b9e1-e5f84b63108a.zip:1068:Sales order line check:700438803-0001
+INFO:root:ORDER-B-aa2e8fc0-e845-407e-b9e1-e5f84b63108a.zip:1068:Sales order line check:700438818-0001
+INFO:root:ORDER-B-aa2e8fc0-e845-407e-b9e1-e5f84b63108a.zip:1068:Sales order line check:700438827-0001
+INFO:root:GL-66871208-c913-4f92-b746-cf8fd39a0edc.zip:1013:General journal line check:10130036177:1
+INFO:root:GL-66871208-c913-4f92-b746-cf8fd39a0edc.zip:1013:General journal line check:10130036177:2
+INFO:root:GL-66871208-c913-4f92-b746-cf8fd39a0edc.zip:1013:General journal line check:10130016714:3
+INFO:root:GL-66871208-c913-4f92-b746-cf8fd39a0edc.zip:1013:General journal line check:10130016714:4
+INFO:root:GL-66871208-c913-4f92-b746-cf8fd39a0edc.zip:1013:General journal line check:10130031029:5
+INFO:root:GL-66871208-c913-4f92-b746-cf8fd39a0edc.zip:1013:General journal line check:10130031029:6
+INFO:root:GL-ea62b71e-b155-40ae-912a-33203efcda91.zip:1013:General journal line check:10130002425:1
+INFO:root:GL-ea62b71e-b155-40ae-912a-33203efcda91.zip:1013:General journal line check:10130002425:2
+INFO:root:GL-7b2fbec4-0bb5-40b7-bb90-a3311f2eccd1.zip:1036:General journal line check::1
+INFO:root:GL-7b2fbec4-0bb5-40b7-bb90-a3311f2eccd1.zip:1036:General journal line check::2
