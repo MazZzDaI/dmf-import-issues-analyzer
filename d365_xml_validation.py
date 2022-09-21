@@ -18,21 +18,21 @@ class d365_xml_validation_client():
         self.__aws_interaction_client__ = aws_interaction(loggingMain)
 
 
-    def download_aws_payload(self, input_definition_group_id):
-        aws_file_url = self.__aws_interaction_client__.find_aws_file_url(input_definition_group_id)
-        payload_files = self.__aws_interaction_client__.download_payload_from_aws_s3_and_unzip(aws_file_url)
+    async def download_aws_payload(self, input_definition_group_id):
+        aws_file_url = await self.__aws_interaction_client__.find_aws_file_url(input_definition_group_id)
+        payload_files = await self.__aws_interaction_client__.download_payload_from_aws_s3_and_unzip(aws_file_url)
 
         return payload_files
 
 
-    def download_azure_payload(self, input_definition_group_id):
+    async def download_azure_payload(self, input_definition_group_id):
         new_blob_url = self.__d365_interaction_client__.renew_sas_token_and_get_payload_url(input_definition_group_id)
         payload_files = self.__d365_interaction_client__.download_payload_from_blob_and_unzip(new_blob_url)
 
         return payload_files
     
 
-    def validate_file_in_d365(self, input_definition_group_id, input_data_area_id, payload_files):
+    async def validate_file_in_d365(self, input_definition_group_id, input_data_area_id, payload_files):
         try:
             for xmlFileName, xmlFileContent in payload_files.items():
                 #self.__logging__.info("File: {0}; Content: {1}".format(xmlFileName, xmlFileContent))

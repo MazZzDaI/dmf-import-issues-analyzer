@@ -7,18 +7,23 @@ from tqdm import tqdm
 from d365_xml_validation import d365_xml_validation_client
 import asyncio
 
-async def worker(queue, pbar, d365_xml_validator, logging):
+
+async def work(args, d365_xml_validator, logging):
+    input_definition_group_id, inputDataAreaId = args
+    try:
+        payload_files = await d365_xml_validator.download_aws_payload(input_definition_group_id)
+
+        #if payload_files:
+        #    await d365_xml_validator.validate_file_in_d365(input_definition_group_id, inputDataAreaId, payload_files)
+    except:
+        logging.error('{}:{}:No file found in AWS'.format(input_definition_group_id, ''))
+
+async def worker(worker_id, queue, pbar, d365_xml_validator, logging):
     while True:
         args = await queue.get()
-        
-        input_definition_group_id, inputDataAreaId = args
-        try:
-            payload_files = d365_xml_validator.download_aws_payload(input_definition_group_id)
 
-            if payload_files:
-                d365_xml_validator.validate_file_in_d365(input_definition_group_id, inputDataAreaId, payload_files)
-        except:
-            logging.error('{}:{}:No file found in AWS'.format(input_definition_group_id, ''))
+        await work(args, d365_xml_validator, logging)        
+        logging.info(worker_id)
 
         queue.task_done()
         pbar.update(1)
@@ -59,11 +64,11 @@ async def main():
             queue.put_nowait([inputDefinitionGroupId, inputDataAreaId])
 
 
-    pbar = tqdm(total=queue.qsize())
+    pbar = tqdm(total=rowNo)
 
     tasks = []
     for i in range(int(os.getenv("async_workers_count"))):
-        task = asyncio.create_task(worker(queue, pbar, d365_xml_validator, logging))
+        task = asyncio.create_task(worker(i, queue, pbar, d365_xml_validator, logging))
         tasks.append(task)
 
     started_at = time.monotonic()

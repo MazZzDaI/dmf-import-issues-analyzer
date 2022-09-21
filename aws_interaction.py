@@ -20,9 +20,9 @@ class aws_interaction():
     aws_prefix = os.getenv('aws_s3_prefix')
 
 
-    def __init__(self, loggingMain, rainbow_table_startdate = datetime.datetime(2022, 9, 1, tzinfo = None)):
+    async def __init__(self, loggingMain, rainbow_table_startdate = datetime.datetime(2022, 9, 1, tzinfo = None)):
         self.__logging__ = loggingMain
-        self.__aws_rainbow_table__ = self.list_s3_files(rainbow_table_startdate)
+        self.__aws_rainbow_table__ = await self.list_s3_files(rainbow_table_startdate)
 
     def download_aws(aws_filename, local_filename, access_key=aws_access_key, secret_key=aws_secret_key, bucket_name=aws_bucket):
         s3 = boto3.resource('s3', aws_access_key_id=access_key, aws_secret_access_key= secret_key)
@@ -48,7 +48,7 @@ class aws_interaction():
         return url
     '''
 
-    def list_s3_files(self, start_datetime):
+    async def list_s3_files(self, start_datetime):
         # creates a list of all the files in S3 bucket
         s3 = boto3.resource('s3', aws_access_key_id=self.aws_access_key, aws_secret_access_key=self.aws_secret_key)
         
@@ -63,7 +63,7 @@ class aws_interaction():
         return fileList
 
 
-    def download_payload_from_aws_s3_and_unzip(self, aws_file_url):
+    async def download_payload_from_aws_s3_and_unzip(self, aws_file_url):
         s3_client = boto3.client('s3', aws_access_key_id=self.aws_access_key, aws_secret_access_key=self.aws_secret_key)
         temp_file = tempfile.NamedTemporaryFile(prefix=aws_file_url.replace('/', '_').replace('\\', '_'))
         s3_client.download_fileobj(self.aws_bucket, aws_file_url, temp_file)
@@ -76,7 +76,7 @@ class aws_interaction():
         return payload_files
 
 
-    def find_aws_file_url(self, input_definition_group_id):
+    async def find_aws_file_url(self, input_definition_group_id):
         aws_file_url = ''
 
         for item in self.__aws_rainbow_table__:
