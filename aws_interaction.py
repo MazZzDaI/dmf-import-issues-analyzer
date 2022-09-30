@@ -1,6 +1,5 @@
 import tempfile
 import datetime
-import io
 import zipfile
 import boto3
 from botocore.client import Config

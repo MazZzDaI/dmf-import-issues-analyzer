@@ -9,7 +9,7 @@ from retry import retry
 
 base_url = os.getenv('base_url')
 
-class d365_interaction_client():
+class D365_interaction_client():
     __access_token__ = ''
 
     
@@ -69,6 +69,19 @@ class d365_interaction_client():
     
     @retry(delay=1, tries=5, jitter=1)
     def odata_check_exist(self, url_request):
+        records_number = self.odata_records_count(url_request)
+        return records_number != 0 
+    
+    
+    @retry(delay=1, tries=5, jitter=1)
+    def odata_records_count(self, url_request):
+        json_response = self.odata_get(url_request)
+        records_number = len(json_response['value'])
+        return records_number
+    
+    
+    @retry(delay=1, tries=5, jitter=1)
+    def odata_get(self, url_request):
         headers = {
             'Authorization': 'Bearer ' + self.__access_token__
         }
@@ -80,6 +93,4 @@ class d365_interaction_client():
             response = requests.request('GET', base_url + url_request, headers=headers)
             
         json_response = json.loads(response.text)
-        records_number = len(json_response['value'])
-    
-        return records_number != 0 
+        return json_response
